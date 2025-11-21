@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TopDown.EnemyBehavior;
 
 namespace TopDown.Shooting
 {
@@ -42,9 +43,28 @@ namespace TopDown.Shooting
             rb.AddForce(transform.right * speed, ForceMode2D.Impulse);
         }
 
-        private void OnCollisionEnter2D(Collision2D collision)
+        /*private void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.collider.CompareTag("Wall"))
+            {
+                SpawnDestroyVFX();
+                Destroy(gameObject);
+            }
+        }*/
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            Enemy enemy = collision.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.Knockback(transform.right);
+
+                SpawnDestroyVFX();
+                Destroy(gameObject);
+                return;
+            }
+
+            if (collision.CompareTag("Wall"))
             {
                 SpawnDestroyVFX();
                 Destroy(gameObject);
