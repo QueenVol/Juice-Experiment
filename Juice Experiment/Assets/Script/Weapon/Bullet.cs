@@ -57,7 +57,7 @@ namespace TopDown.Shooting
             Enemy enemy = collision.GetComponent<Enemy>();
             if (enemy != null)
             {
-                enemy.Knockback(transform.right);
+                enemy.TakeDamage(1, transform.right);
 
                 SpawnDestroyVFX();
                 Destroy(gameObject);
