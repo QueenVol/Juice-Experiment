@@ -7,10 +7,37 @@ namespace TopDown.Movement
 {
     public class PlayerRotation : Rotation
     {
+        [SerializeField] private SpriteRenderer playerSprite;
+        [SerializeField] private SpriteRenderer weaponSprite;
+
+        private Camera cam;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            cam = Camera.main;
+        }
+
         private void OnLook(InputValue value)
         {
-            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(value.Get<Vector2>());
-            LookAt(mousePosition);
+            Vector2 mouseScreen = value.Get<Vector2>();
+            Vector3 mouseWorld = cam.ScreenToWorldPoint(mouseScreen);
+            mouseWorld.z = 0f;
+
+            LookAt(mouseWorld);
+
+            HandleFlip(mouseWorld);
+        }
+
+        private void HandleFlip(Vector3 mouseWorld)
+        {
+            bool facingRight = mouseWorld.x >= transform.position.x;
+
+            if (playerSprite != null)
+                playerSprite.flipX = !facingRight;
+
+            if (weaponSprite != null)
+                weaponSprite.flipY = !facingRight;
         }
     }
 }

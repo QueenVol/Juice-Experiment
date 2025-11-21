@@ -6,11 +6,20 @@ namespace TopDown.Movement
 {
     public class Rotation : MonoBehaviour
     {
+        [SerializeField] private Transform rotateTarget;
+
+        protected virtual void Awake()
+        {
+            if (rotateTarget == null)
+                rotateTarget = transform;
+        }
+
         protected void LookAt(Vector3 target)
         {
-            float lookAngle = AngleBetweenTwoPoints(transform.position, target) + 90;
+            if (rotateTarget == null) return;
 
-            transform.eulerAngles = new Vector3(0, 0, lookAngle);
+            float lookAngle = AngleBetweenTwoPoints(rotateTarget.position, target) + 180f;
+            rotateTarget.eulerAngles = new Vector3(0, 0, lookAngle);
         }
 
         private float AngleBetweenTwoPoints(Vector3 a, Vector3 b)
