@@ -19,6 +19,9 @@ namespace TopDown.EnemyBehavior
         [SerializeField] private float knockbackForce = 5f;
         [SerializeField] private float knockbackDuration = 0.1f;
 
+        private bool isHitFlash;
+        [SerializeField] private float hitFlashDuration = 0.1f;
+
         [SerializeField] private float deathFlashDuration = 0.4f;
         [SerializeField] private float flashInterval = 0.1f;
 
@@ -44,7 +47,24 @@ namespace TopDown.EnemyBehavior
             {
                 if (hitSFX != null)
                     hitSFX.Play();
+                StartCoroutine(HitFlashRoutine());
             }
+        }
+
+        private IEnumerator HitFlashRoutine()
+        {
+            if (isHitFlash) yield break;
+            isHitFlash = true;
+
+            Color originalColor = sr.color;
+
+            sr.color = new Color(1.5f, 0.3f, 0.3f, originalColor.a);
+
+            yield return new WaitForSeconds(hitFlashDuration);
+
+            sr.color = originalColor;
+
+            isHitFlash = false;
         }
 
         private IEnumerator DieRoutine()
@@ -56,14 +76,25 @@ namespace TopDown.EnemyBehavior
                 deathSFX.Play();
 
             float timer = 0f;
+            Color originalColor = sr.color;
+
             while (timer < deathFlashDuration)
             {
-                sr.enabled = !sr.enabled;
+                sr.color = originalColor * 1.5f;
+                sr.enabled = true;
+
+                yield return new WaitForSeconds(flashInterval * 0.5f);
+
+                sr.color = originalColor;
+                sr.enabled = false;
+
+                yield return new WaitForSeconds(flashInterval * 0.5f);
+
                 timer += flashInterval;
-                yield return new WaitForSeconds(flashInterval);
             }
 
             sr.enabled = true;
+            sr.color = originalColor;
 
             Destroy(gameObject);
         }
