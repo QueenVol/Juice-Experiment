@@ -163,3 +163,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   maxDistance: 40
+  destroyVFX: {fileID: 5134768490779981567, guid: 357ed8574aa484a41ae1cbf9f0c0da79, type: 3}

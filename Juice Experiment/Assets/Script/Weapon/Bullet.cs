@@ -10,6 +10,7 @@ namespace TopDown.Shooting
         private Rigidbody2D rb;
         [SerializeField] private float speed;
         [SerializeField] private float maxDistance;
+        [SerializeField] private GameObject destroyVFX;
 
         private Vector3 startPos;
 
@@ -21,7 +22,6 @@ namespace TopDown.Shooting
         private void OnEnable()
         {
             startPos = transform.position;
-
             rb.velocity = Vector2.zero;
         }
 
@@ -29,6 +29,7 @@ namespace TopDown.Shooting
         {
             if (Vector3.Distance(startPos, transform.position) > maxDistance)
             {
+                SpawnDestroyVFX();
                 Destroy(gameObject);
             }
         }
@@ -45,8 +46,15 @@ namespace TopDown.Shooting
         {
             if (collision.collider.CompareTag("Wall"))
             {
+                SpawnDestroyVFX();
                 Destroy(gameObject);
             }
+        }
+
+        private void SpawnDestroyVFX()
+        {
+            if (destroyVFX == null) return;
+            Instantiate(destroyVFX, transform.position, transform.rotation);
         }
     }
 }
