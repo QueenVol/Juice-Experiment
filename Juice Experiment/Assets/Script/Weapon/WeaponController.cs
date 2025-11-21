@@ -19,6 +19,8 @@ namespace TopDown.Shooting
 
         [SerializeField] private CameraShake cameraShake;
 
+        [SerializeField] private AudioSource shootSFX;
+
         private void Update()
         {
             cooldownTimer += Time.deltaTime;
@@ -52,6 +54,8 @@ namespace TopDown.Shooting
             bulletVFX.SetTrigger("shoot");
 
             cameraShake.Shake();
+
+            shootSFX.Play();
         }
     }
 }

@@ -8,18 +8,26 @@ namespace TopDown.EnemyBehavior
     public class Enemy : MonoBehaviour
     {
         private Rigidbody2D rb;
+        private SpriteRenderer sr;
 
         [SerializeField] private int maxHealth = 5;
         private int currentHealth;
 
+        [SerializeField] private AudioSource hitSFX;
+        [SerializeField] private AudioSource deathSFX;
+
         [SerializeField] private float knockbackForce = 5f;
         [SerializeField] private float knockbackDuration = 0.1f;
+
+        [SerializeField] private float deathFlashDuration = 0.4f;
+        [SerializeField] private float flashInterval = 0.1f;
 
         private bool isKnockback;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
+            sr = GetComponent<SpriteRenderer>();
             currentHealth = maxHealth;
         }
 
@@ -30,8 +38,34 @@ namespace TopDown.EnemyBehavior
 
             if (currentHealth <= 0)
             {
-                Destroy(gameObject);
+                StartCoroutine(DieRoutine());
             }
+            else
+            {
+                if (hitSFX != null)
+                    hitSFX.Play();
+            }
+        }
+
+        private IEnumerator DieRoutine()
+        {
+            isKnockback = true;
+            rb.velocity = Vector2.zero;
+
+            if (deathSFX != null)
+                deathSFX.Play();
+
+            float timer = 0f;
+            while (timer < deathFlashDuration)
+            {
+                sr.enabled = !sr.enabled;
+                timer += flashInterval;
+                yield return new WaitForSeconds(flashInterval);
+            }
+
+            sr.enabled = true;
+
+            Destroy(gameObject);
         }
 
         public void Knockback(Vector2 direction)
