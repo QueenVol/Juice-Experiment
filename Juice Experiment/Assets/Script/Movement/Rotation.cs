@@ -16,15 +16,11 @@ namespace TopDown.Movement
 
         protected void LookAt(Vector3 target)
         {
-            if (rotateTarget == null) return;
+            if (!rotateTarget) return;
 
-            float lookAngle = AngleBetweenTwoPoints(rotateTarget.position, target) + 180f;
-            rotateTarget.eulerAngles = new Vector3(0, 0, lookAngle);
-        }
+            float angle = Mathf.Atan2(target.y - rotateTarget.position.y, target.x - rotateTarget.position.x) * Mathf.Rad2Deg;
 
-        private float AngleBetweenTwoPoints(Vector3 a, Vector3 b)
-        {
-            return Mathf.Atan2(a.y - b.y, a.x - b.x) * Mathf.Rad2Deg;
+            rotateTarget.eulerAngles = new Vector3(0, 0, angle);
         }
     }
 }

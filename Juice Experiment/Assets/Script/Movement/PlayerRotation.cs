@@ -9,6 +9,8 @@ namespace TopDown.Movement
     {
         [SerializeField] private SpriteRenderer playerSprite;
         [SerializeField] private SpriteRenderer weaponSprite;
+        [SerializeField] private Transform shootPoint;
+        [SerializeField] private Transform weaponVFX;
 
         private Camera cam;
 
@@ -38,6 +40,12 @@ namespace TopDown.Movement
 
             if (weaponSprite != null)
                 weaponSprite.flipY = !facingRight;
+
+            if (shootPoint != null)
+                shootPoint.localPosition = facingRight ? new Vector2(shootPoint.localPosition.x, 0.02f) : new Vector2(shootPoint.localPosition.x, -0.02f);
+
+            if (weaponVFX != null)
+                weaponVFX.localPosition = facingRight ? new Vector2(weaponVFX.localPosition.x, 0.02f) : new Vector2(weaponVFX.localPosition.x, -0.02f);
         }
     }
 }
