@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Build.Reporting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TopDown.CameraControl;
 
 namespace TopDown.Shooting
 {
@@ -14,6 +16,8 @@ namespace TopDown.Shooting
         [SerializeField] private GameObject bulletPrefab;
         [SerializeField] private Transform shootPoint;
         [SerializeField] private Animator bulletVFX;
+
+        [SerializeField] private CameraShake cameraShake;
 
         private void Update()
         {
@@ -46,6 +50,8 @@ namespace TopDown.Shooting
             bullet.GetComponent<Bullet>().ShootBullet(shootPoint);
 
             bulletVFX.SetTrigger("shoot");
+
+            cameraShake.Shake();
         }
     }
 }

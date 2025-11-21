@@ -11,6 +11,8 @@ namespace TopDown.CameraControl
         [SerializeField]private float displacement = 0.15f;
         private float cameraZ = -10f;
 
+        public Vector3 BasePosition { get; private set; }
+
         private void Update()
         {
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -18,7 +20,8 @@ namespace TopDown.CameraControl
 
             Vector3 finalCameraPosition = playerTransform.position + cameraDisplacement;
             finalCameraPosition.z = cameraZ;
-            transform.position = finalCameraPosition;
+
+            BasePosition = finalCameraPosition;
         }
     }
 }
